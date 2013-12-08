@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/modbus_table"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        >
+	<TableRow>
+  		<TextView
+    		android:id="@+id/mod_Address"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="Adresse" 
+        	android:padding="3dip" 
+        	android:textSize="12pt"
+        	android:gravity="center_horizontal"
+        	/>
+		<TextView
+        	android:id="@+id/mod_Value"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="Valuer" 
+        	android:padding="3dip"
+        	android:textSize="12pt" 
+        	android:gravity="center_horizontal" />
+	</TableRow>
+</TableLayout>

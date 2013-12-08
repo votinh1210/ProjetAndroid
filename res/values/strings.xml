@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ENIVL-DROID</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="point_type_prompt">Sélectionnez un type Point</string>
+    <string name="Conn_Settings">Paramètres</string>
+    <string name="modbus_prefs">ENIVL-DROID</string>
+    <string name="image_content_description">ENIVL-DROID</string>
+    <string name="user">Utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="connect">Se connecter</string>
+    <string name="user_format_error">"le nom d'utilisateur et le mot de passe ne correspondent pas."</string>
+    <string name="user_or_password_empty">"Le nom d'utilisateur et mot de passe sont obligatoires."</string>
+    <string name="aboutText">
+<![CDATA[
+	     Application basée sur la bibliothèque Modbus. Développé par des élèves BERNARDINI GONCALES Ricardo et DE SOUZA BIAGIONI Andriel Carlos de l`École Nationale d`Ingénieurs du Val de Loire. Projet supervisé par l`enseignement M. CONSTANTIN Didier.]]>
+    </string>
+    <string name="title_activity_splash">ENIVL-DROID</string>
+    <string name="title_activity_about">Sur ENIVL-DROID</string>
+    
+</resources>
