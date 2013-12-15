@@ -17,7 +17,7 @@ public class PollModbus implements Runnable {
 	private int m_polltime;
 	private boolean m_connected = false;
 
-	private Object[] modbusValues;
+	public static Object[] modbusValues;
 
 	private TCPMaster mbTCPMaster;
 	private EnivlDroidLocator mbLocator;

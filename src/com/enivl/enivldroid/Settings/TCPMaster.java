@@ -53,7 +53,6 @@ public class TCPMaster extends TcpMaster {
 		}
 
 		int valueLength = locator.getRegistersLength() / registersPerValue;
-
 		byte[] data = new byte[locator.getRegistersLength()];
 
 		Object[] values = new Object[valueLength];
@@ -96,8 +95,10 @@ public class TCPMaster extends TcpMaster {
 				response = (ReadResponse) send(request);
 
 				data = response.getData();
-
+				
 				values = locator.bytesToValueArray(data);
+			
+				
 			}
 
 			catch (ModbusTransportException e) {

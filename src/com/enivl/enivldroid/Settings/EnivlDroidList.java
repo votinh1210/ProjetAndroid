@@ -18,10 +18,10 @@ import android.widget.TextView;
 /**
  * Classe étendu de ListView utilisé dans le programme
  * */
-class EnivlDroidList extends ListView {
+public class EnivlDroidList extends ListView {
 
 	private EfficientAdapter efficientAdapter;
-	static private Object[] responses;
+	static public Object[] responses;
 
 	private Object[] valuesOlders;
 	private int var_startAddress;

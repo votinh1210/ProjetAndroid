@@ -1,5 +1,7 @@
 package com.enivl.enivldroid.Settings;
 
+
+import com.enivl.enivldroid.Graphics.GraphicsActivity;
 import com.enivl.enivldroid.R;
 import com.enivl.enivldroid.R.array;
 import com.enivl.enivldroid.R.drawable;
@@ -34,6 +36,7 @@ import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
@@ -74,6 +77,7 @@ public class EnivlDroid extends Activity {
 	private static final int parametres = Menu.FIRST + 2;
 	private static final int dataTypes = Menu.FIRST + 3;
 	private static final int about = Menu.FIRST + 4;
+	private static final int visual = Menu.FIRST + 5;
 
 	//Paramétre de connexion
 	private IpParameters ipParameters;
@@ -534,6 +538,8 @@ public class EnivlDroid extends Activity {
 
 		menu.add(0, about, 0, "Sur ENIVL-DROID").setIcon(
 				android.R.drawable.ic_menu_info_details);
+		
+		menu.add(0, visual, 0, "Visualialiser");
 
 		setDataType(dataType);
 
@@ -571,6 +577,10 @@ public class EnivlDroid extends Activity {
 			startActivityForResult(new Intent(this,
 					com.enivl.enivldroid.AboutActivity.class), 0);
 
+			return true;
+			
+		case visual:
+			startActivityForResult(new Intent(this, GraphicsActivity.class), 0);
 			return true;
 		}
 
@@ -647,6 +657,8 @@ public class EnivlDroid extends Activity {
 		mainLayout.removeView(notConnTextView);
 
 		mainLayout.addView(mbList, listParams);
+		
+		
 	}
 /*
  * 
@@ -808,4 +820,5 @@ public class EnivlDroid extends Activity {
 		panel.setLayoutAnimation(controller);
 
 	}
+	
 }
