@@ -24,6 +24,7 @@ public class Connections extends PreferenceActivity implements
 	private EditTextPreference PortPref;
 	private EditTextPreference PollTimePref;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -54,6 +55,7 @@ public class Connections extends PreferenceActivity implements
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -62,6 +64,7 @@ public class Connections extends PreferenceActivity implements
 				.registerOnSharedPreferenceChangeListener(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPause() {
 

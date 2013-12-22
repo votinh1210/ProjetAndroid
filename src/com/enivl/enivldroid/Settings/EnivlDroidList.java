@@ -3,9 +3,6 @@ package com.enivl.enivldroid.Settings;
 import java.util.Arrays;
 
 import com.enivl.enivldroid.R;
-import com.enivl.enivldroid.R.id;
-import com.enivl.enivldroid.R.layout;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +17,10 @@ import android.widget.TextView;
  * */
 public class EnivlDroidList extends ListView {
 
-	private EfficientAdapter efficientAdapter;
 	static public Object[] responses;
 
-	private Object[] valuesOlders;
 	private int var_startAddress;
 
-	private String[] display_values;
-	private String[] display_addresses;
 	public EfficientAdapter adapter = null;
 
 	private int registerPerValue;
@@ -40,10 +33,13 @@ public class EnivlDroidList extends ListView {
 		this.registerPerValue = registersPerValue;
 		EnivlDroidList.responses = modbusResponse;
 
-		this.valuesOlders = valuesOlders = modbusResponse.clone();
+		modbusResponse.clone();
 
 		adapter = new EfficientAdapter(context);
 		this.setAdapter(adapter);
+	}
+	public EnivlDroidList(Context context) {
+		super(context);
 	}
 	/*
 	 * Methode set pour affiche l'adresse de début du registre 

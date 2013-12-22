@@ -3,15 +3,12 @@ package com.enivl.enivldroid.Settings;
 
 import com.enivl.enivldroid.Graphics.GraphicsActivity;
 import com.enivl.enivldroid.R;
-import com.enivl.enivldroid.R.array;
-import com.enivl.enivldroid.R.drawable;
-import com.enivl.enivldroid.R.id;
-import com.enivl.enivldroid.R.layout;
 import com.serotonin.modbus4j.base.SlaveAndRange;
 import com.serotonin.modbus4j.code.DataType;
 import com.serotonin.modbus4j.code.RegisterRange;
 import com.serotonin.modbus4j.ip.IpParameters;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,27 +16,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-//import android.util.Log;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -48,7 +37,6 @@ import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+@SuppressLint("HandlerLeak")
 @TargetApi(Build.VERSION_CODES.FROYO)
 
 /**
@@ -66,7 +55,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
  * */
 public class EnivlDroid extends Activity {
 
-	private final boolean DEBUG = false;
+	final boolean DEBUG = false;
 
 	/*
 	 * Champs de variables
@@ -101,13 +90,9 @@ public class EnivlDroid extends Activity {
 	private int m_count;
 	private int regType;
 	private int dataType;
-	private int writeRegOffset;
-
 	private String oldHostIPaddress = hostIPaddress;
 
 	private int oldHostPort = hostPort;
-	private int oldDataType;
-
 	private PollModbus mb = null;
 	private EnivlDroidList mbList;
 
@@ -118,10 +103,7 @@ public class EnivlDroid extends Activity {
 	private AlertDialog.Builder dataTypeMenuBuilder;
 	private AlertDialog dataTypeAlert;
 	private MenuItem dataTypeMenuItem;
-	private View textEntryNumericView;
-
-	private Object mbWriteValue;
-
+	private MenuItem visualItem;
 	private EnivlDroidMsgExceptionHandler exceptionHandler;
 
 	private SharedPreferences settings;
@@ -148,7 +130,7 @@ public class EnivlDroid extends Activity {
 			case 0: // Nous sommes déconnectés
 
 				hideMBList();
-
+				
 				switch (arg2) {
 
 				case 0: // Déconnecté de l'hôte
@@ -172,24 +154,25 @@ public class EnivlDroid extends Activity {
 			case 1:  
 				/*Nous sommes connectés*/
 				displayString = "Connecté à" + hostIPaddress;
-
+				
 				showMBList();
 				break;
 
 			case -1: 
 				/*On a un certain type d'erreur*/
 				displayString = "Erreur: " + msgString;
-
+				
 				break;
 
 			default: 
 				/* Si nous n'avons pas un de ces numéros quelque chose est cassé*/
 				displayString = "Erreur!";
+				
 				break;
 
 			}
 
-			Toast.makeText(getBaseContext(), displayString, 10).show();
+			Toast.makeText(getBaseContext(), displayString, Toast.LENGTH_SHORT).show();
 			super.handleMessage(pollingMsg);
 		}
 
@@ -239,6 +222,7 @@ public class EnivlDroid extends Activity {
 	/*
 	 * Méthode qui crée tous les composants de l'écran.	
 	 * */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -251,8 +235,6 @@ public class EnivlDroid extends Activity {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		/*Obtenir les préférences actuellement stockées dans les SharedPreferences*/
 		getSharedSettings();
-		oldDataType = dataType;
-		
 		/*mettre en place des données de la liste factices*/
 		modbusData = new Object[] { 0 };
 		
@@ -264,10 +246,6 @@ public class EnivlDroid extends Activity {
 		/*besoin pour obtenir la disposition relative parent avant d'ajouter le point de vue*/
 		mainLayout = (LinearLayout) findViewById(R.id.main_layout);
 		
-		/*ajouter une règle*/
-		Display getRotation = ((WindowManager) getApplication()
-				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
 		listParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT);
 
@@ -280,7 +258,7 @@ public class EnivlDroid extends Activity {
 				.setText("Bienvenue à ENIVL-DROID.\nL'application n'est pas connecté.");
 
 		mainLayout.addView(notConnTextView, listParams);
-
+		
 		switchRegType(regType);
 
 		ipParameters = new IpParameters();
@@ -306,7 +284,7 @@ public class EnivlDroid extends Activity {
 		/*
 		 * Construire tableau avec les types de points Modbus
 		 * */
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 				R.array.pointTypes, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		s.setAdapter(adapter);
@@ -322,7 +300,6 @@ public class EnivlDroid extends Activity {
 
 					public void onClick(DialogInterface dialog, int item) {
 
-						oldDataType = item + 1;
 						setDataType(item + 1);
 
 						dataTypeAlert.dismiss();
@@ -355,7 +332,7 @@ public class EnivlDroid extends Activity {
 
 			}
 
-			public void onNothingSelected(AdapterView parent) {
+			public void onNothingSelected(AdapterView<?> parent) {
 				// Rien
 			}
 		});
@@ -539,9 +516,11 @@ public class EnivlDroid extends Activity {
 		menu.add(0, about, 0, "Sur ENIVL-DROID").setIcon(
 				android.R.drawable.ic_menu_info_details);
 		
-		menu.add(0, visual, 0, "Visualialiser");
+		visualItem = menu.add(0, visual, 0, "Visualialiser");
 
 		setDataType(dataType);
+		
+		if (mb.isConnected()) visualItem.setEnabled(true); else visualItem.setEnabled(false);
 
 		return true;
 	}
@@ -580,6 +559,9 @@ public class EnivlDroid extends Activity {
 			return true;
 			
 		case visual:
+			//mbLocator.setSlaveAndRange(new SlaveAndRange(slaveAddress, RegisterRange.COIL_STATUS));
+			//mbWriteValue = !mbWriteValue;
+			//mb.writeValue(mbLocator, mbWriteValue);
 			startActivityForResult(new Intent(this, GraphicsActivity.class), 0);
 			return true;
 		}
@@ -624,7 +606,7 @@ public class EnivlDroid extends Activity {
 	private void killPollingThread() {
 
 		if (!mb.isConnected()) {
-			Toast.makeText(this, "Non Connecté", 10).show();
+			Toast.makeText(this, "Non Connecté", Toast.LENGTH_SHORT).show();
 		} else {
 
 			mb.disconnect();
@@ -640,7 +622,7 @@ public class EnivlDroid extends Activity {
 
 			mainLayout.removeView(mbList);
 			mainLayout.addView(notConnTextView);
-
+			visualItem.setEnabled(false);
 		}
 	}
 
@@ -655,7 +637,7 @@ public class EnivlDroid extends Activity {
 	private void forceShowMBList() {
 
 		mainLayout.removeView(notConnTextView);
-
+		visualItem.setEnabled(true);
 		mainLayout.addView(mbList, listParams);
 		
 		
@@ -701,6 +683,7 @@ public class EnivlDroid extends Activity {
 		try {
 			mbLocator = new EnivlDroidLocator(slaveAddress, regType, offset,
 					dataType, m_count);
+			
 
 		} catch (Exception e) {
 
@@ -775,7 +758,6 @@ public class EnivlDroid extends Activity {
 		case RegisterRange.INPUT_STATUS:
 			mbList.setStartAddress(1000 + offset);
 
-			oldDataType = dataType;
 			setDataType(DataType.BINARY);
 
 			break;

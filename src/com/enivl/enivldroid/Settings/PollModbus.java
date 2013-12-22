@@ -195,7 +195,7 @@ public class PollModbus implements Runnable {
 		try {
 			while (m_connected) {
 				modbusValues = mbTCPMaster.getValues(mbLocator);
-
+				//System.out.println(Boolean.parseBoolean(modbusValues[0].toString()));
 				m_ListView.post(new Runnable() {
 					public void run() {
 						m_ListView.updateData(modbusValues);

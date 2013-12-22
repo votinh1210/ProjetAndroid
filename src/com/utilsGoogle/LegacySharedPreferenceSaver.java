@@ -20,7 +20,6 @@ package com.utilsGoogle;
 import com.utilsGoogle.base.SharedPreferenceSaver;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 

@@ -5,7 +5,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 /**
  * Classes avec tout les activités du ENIVL DROID
@@ -14,7 +13,7 @@ import android.preference.PreferenceManager;
 
 public class EnivlDroidActivity extends Activity {
 
-	private ActionBar actionBar;
+	ActionBar actionBar;
 	
 	//Type de API 8
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
